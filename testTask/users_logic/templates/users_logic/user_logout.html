@@ -1,0 +1,21 @@
+{% extends 'users_logic/layout.html' %}
+
+{% load static %}
+{% block css_additional %}
+    <link rel="stylesheet" href="{% static 'users_logic/css/user_logout.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="alert alert-success" role="alert">
+            <center><h4 class="alert-heading">Чудово!</h4></center>
+              <center><p>Ви успішно розавторизувались.Можете повернутись на
+                  <a href="{% url 'main_page' %}">
+                    Головну сторінку
+                  </a> або <a href="#">Авторизуватись знову</a>
+              </p></center>
+              <hr>
+              <p class="mb-0"></p>
+        </div>
+    </div>
+{% endblock %}

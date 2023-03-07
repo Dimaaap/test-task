@@ -1,0 +1,28 @@
+
+/* PRESSING THE FOOTER  */
+html, body {
+    height: 100%
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+.text-secondary {
+    text: white;
+}
+
+
+.alert {
+    margin-top: 200px;
+    font-family: 'Rubik';
+}

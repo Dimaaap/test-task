@@ -1,0 +1,13 @@
+{% extends 'users_logic/layout.html'  %}
+
+{% load static %}
+{% block css_additional %}
+    <link rel="stylesheet" href="{% static 'data/css/main_page.css' %}">
+{% endblock %}
+
+{% block body %}
+    <form method="post" class="schema-create-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+{% endblock %}

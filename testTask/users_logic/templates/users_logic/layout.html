@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+      {% if title %}
+        <title>{{ title }}</title>
+      {% else %}
+        <title>Test Task</title>
+      {% endif %}
+    {% endblock %}
+    <!-- Connect to Bootstrap CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    {% block css_additional %}
+
+    {% endblock %}
+</head>
+<body>
+    <!-- PAGE HEADER -->
+        <div class="content">
+        <header class="p-3 text-bg-dark">
+            <div class="container">
+              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                  <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                  <li><a href="{% url 'main_page' %}" class="nav-link px-2 text-secondary">Головна сторінка</a></li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                  <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+                </form>
+                {% if not request.user.is_authenticated %}
+                    <div class="text-end">
+                        <a href="{% url 'user_login' %}" class="btn btn-outline-light">Логін</a>
+                        <a href="#" class="btn btn-outline-light">Реєстрація</a>
+                    </div>
+                {% else %}
+                    <div class="text-end">
+                        <a href="{% url 'schemas_list' %}" class="btn btn-outline-light">Мої схеми</a>
+                        <a href="{% url 'main_form_page' %}" class="btn btn-outline-light">Сформувати схему</a>
+                        <a href="{% url 'user_logout' %}" class="btn btn-outline-light">Вийти</a>
+                    </div>
+                {% endif %}
+              </div>
+            </div>
+        </header>
+        {% block body %}
+        {% endblock %}
+    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+    <p class="text-center text-muted">© 2022 Company, Inc</p>
+  </footer>
+</body>
+</html>
