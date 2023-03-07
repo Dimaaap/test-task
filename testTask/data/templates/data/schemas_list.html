@@ -9,22 +9,20 @@
 
 {% block body %}
     <div class="container">
-        <h1>Створені схеми</h1>
+        <center><h1>Створені схеми</h1></center>
         <hr>
-        {% if query %}
-            <div class="grid-title">
+        <center><div class="schemas-content">
+            {% if query %}
                 {% for schema in query %}
                     <div class="schema-title">
                         {% if schema.title %}
-                            <a class="schema-link"><p>{{ schema.title }}</p></a>
-                            <span><a class="btn btn-danger" href="#">Видалити</a></span>
-                        <span><a class="btn btn-info" href="#">Редагувати</a></span>
+                            <a class="schema-link" href="{% url 'schema_page' schema.id %}"><p>{{ schema.title }}</p></a>
                         {% else %}
-                            <a class="schema-link"><p>untitled schema</p></a>
+                            <a class="schema-link" href="{% url 'schema_page' schema.id %}"><p>untitled schema</p></a>
                         {% endif %}
                     </div>
                 {% endfor %}
-            </div>
-        {% endif %}
+            {% endif %}
+        </div></center>
     </div>
 {% endblock %}

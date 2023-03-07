@@ -38,10 +38,6 @@ body {
     font-size: 16px;
 }
 
-.grid-title {
-    display: grid;
-    grid-template-columns: 200px 200px 200px 200px 200px;
-}
 
 .schema-link {
     text-decoration: none;
@@ -49,3 +45,22 @@ body {
     cursor: pointer;
 }
 
+.schema-title {
+    background: #FCFCFC;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+}
+
+.schemas-content {
+    background: #E5E5E5;
+    border-radius: 20px 20px;
+    padding: 20px;
+    max-width: 500px;
+}
+
+.btn-warning {
+    margin-top: 20px;
+    margin-left: 120px;
+
+}
