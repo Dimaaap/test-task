@@ -2,6 +2,9 @@ from pathlib import Path
 import os
 
 from decouple import config
+from faker import Faker
+
+faker = Faker()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -123,3 +126,14 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+FIELDS_DICT = {
+    "Повне ім'я", faker.name(),
+    "Робота", faker.job(),
+    "Email", faker.email(),
+    "Ім'я домену", faker.domain_name(),
+    "Назва компанії", faker.company(),
+    "Номер телефону", faker.phone_number(),
+    "Текст", faker.text(),
+    "Адреса", faker.address(),
+    "Дата", faker.date()
+}

@@ -10,8 +10,44 @@
 {% block body %}
     <div class="container">
         <h1>{{ schema.title }}</h1>
+        {% if fields %}
+            <div class="schema-fields">
+                <table>
+                    <caption>Поля схеми</caption>
+                    <tr>
+                        <th>Назва поля</th>
+                        <th>Тип даних</th>
+                        <th>Мінімальне значення</th>
+                        <th>Максимальне значення</th>
+                        <th>Видалити поле</th>
+                    </tr>
+                        {% for field in fields %}
+                            <tr>
+                                <td class="field-title">{{ field.name }}</td>
+                                <td class="field-type">{{ field.field }}</td>
+                                {% if field.range_min %}
+                                    <td class="field-type">{{ field.range_min }}</td>
+                                {% else %}
+                                    <td class="field-type">Значення відсутнє</td>
+                                {% endif %}
+                                {% if field.range_max %}
+                                    <td class="field-type">{{ field.range_max }}</td>
+                                {% else %}
+                                    <td class="field-type">Значення відсутнє</td>
+                                {% endif %}
+                                <td><a href="{% url 'delete_field' field.pk %}" class="btn btn-danger">x</a></td>
+                            </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <h5>Полів поки немає</h5>
+        {% endif %}
         <a href="{% url 'delete_schema' schema.pk %}" class="btn btn-danger">Видалити схему</a>
         <a href="{% url 'add_field' schema.pk %}" class="btn btn-secondary">Додати поле</a>
+        {% if fields %}
+            <a href="#" class="btn btn-success">Сформувати CSV</a>
+        {% endif %}
         <!--<a href="#" class="btn btn-warning">Сформувати</a> -->
     </div>
 
