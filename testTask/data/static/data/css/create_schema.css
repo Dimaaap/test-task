@@ -77,3 +77,8 @@ td {
 table {
     font-family: 'Rubik';
 }
+
+.field-select-form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

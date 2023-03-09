@@ -23,3 +23,6 @@ def get_field_from_db(model: callable, field: str, value):
 def delete_data_from_db(model: callable, field: str, value):
     filter_fields_in_db(model, field, value).delete()
 
+
+def check_count_fields():
+    pass

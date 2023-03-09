@@ -1,15 +1,15 @@
 import csv
 from datetime import datetime
 from random import randint
-import io
+import os
 
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.contrib import messages
 from faker import Faker
 
-
-from .forms import FakeCSVSchemaForm, CreateField
+from .forms import FakeCSVSchemaForm, CreateField, CountFields
 from .models import FakeCVSSchema, CVSSchemaFields
 from .services import *
 
@@ -20,11 +20,13 @@ def create_new_schema(request):
         form = FakeCSVSchemaForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            new_schema = FakeCVSSchema(author=request.user, title=title)
+            delimiter_char = form.cleaned_data['delimiter']
+            new_schema = FakeCVSSchema(author=request.user, title=title,
+                                       delimiter=delimiter_char)
             try:
                 new_schema.save()
                 return redirect('schemas_list')
-            except (Exception, ) as e:
+            except (Exception,) as e:
                 print(e)
                 messages.error(request, 'Помилка створення схеми')
         else:
@@ -42,10 +44,20 @@ def schemas_list(request):
 
 def schema_page(request, pk):
     schema = get_field_from_db(FakeCVSSchema, 'id', pk)
+    count_fields = filter_fields_in_db(CVSSchemaFields, 'schema', schema.id).count()
     if not schema:
         return redirect('main_page')
+    if request.method == 'POST':
+        form = CountFields(request.POST)
+        if int(form['count_field'].value()) > count_fields:
+            messages.error(request, 'Кількість полів перевищує ту кількість,яка у вас задана')
+        else:
+            request.session['count_field'] = int(form['count_field'].value())
+    else:
+        form = CountFields()
+        form.fields['count_field'].initial = count_fields
     fields = filter_fields_in_db(CVSSchemaFields, 'schema', schema)
-    return render(request, 'data/schema_page.html', {'schema': schema, 'fields': fields})
+    return render(request, 'data/schema_page.html', {'schema': schema, 'fields': fields, 'form': form})
 
 
 def delete_schema(request, pk):
@@ -74,13 +86,38 @@ def delete_field(request, pk):
     schema = get_field_from_db(FakeCVSSchema, 'pk', field.schema.pk)
     try:
         field.delete()
-    except (Exception, ):
+    except (Exception,):
         return HttpResponse('Помилка')
     return redirect('schema_page', schema.pk)
 
 
 def form_csv(request, pk):
-    faker = Faker()
-
-
-
+    fake = Faker()
+    choice_dict = settings.FIELDS_DICT
+    data_schema = get_field_from_db(FakeCVSSchema, 'id', pk)
+    schema_fields = filter_fields_in_db(CVSSchemaFields, 'schema', data_schema.pk)
+    filename = data_schema.title + str(randint(1, 10)) + '.csv'
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    with open(filename, 'w', encoding='utf-8-sig') as f:
+        # writer = csv.writer(f, delimiter=data_schema.delimiter)
+        writer = csv.writer(response)
+        header = [column.name for column in schema_fields]
+        writer.writerow(header)
+        count_fields = schema_fields.count()
+        for i in range(request.session['count_field']):
+            row = []
+            for column in schema_fields.all():
+                if column.field == 'Число':
+                    min_value = column.range_min if column.range_min else 0
+                    max_value = column.range_max if column.range_max else 100
+                    row.append(randint(min_value, max_value))
+                elif column.field == 'Текст':
+                    min_value = column.range_min if column.range_min else 1
+                    max_value = column.range_max if column.range_max else 10
+                    row.append(fake.text(randint(min_value + 5, max_value + 5)))
+                else:
+                    row.append(choice_dict[column.field])
+            writer.writerow(row)
+    # return HttpResponse(filename)
+    return response

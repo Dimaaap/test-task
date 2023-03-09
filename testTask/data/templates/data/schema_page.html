@@ -9,6 +9,19 @@
 
 {% block body %}
     <div class="container">
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.tags != 'error' %}
+              <center><div class="alert-success" id="msg" role="alert">
+                {{ message }}
+              </div></center>
+            {% else %}
+              <center><div class="alert-error" id="danger-msg" role="alert">
+                {{ message }}
+              </div></center>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
         <h1>{{ schema.title }}</h1>
         {% if fields %}
             <div class="schema-fields">
@@ -40,13 +53,19 @@
                         {% endfor %}
                 </table>
             </div>
+            <form method="post" class="field-select-form" style="max-width: 400px;">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn-info">Підтвердити</button>
+            </form>
         {% else %}
             <h5>Полів поки немає</h5>
         {% endif %}
+
         <a href="{% url 'delete_schema' schema.pk %}" class="btn btn-danger">Видалити схему</a>
         <a href="{% url 'add_field' schema.pk %}" class="btn btn-secondary">Додати поле</a>
         {% if fields %}
-            <a href="#" class="btn btn-success">Сформувати CSV</a>
+            <a href="{% url 'generate_csv' schema.pk %}" class="btn btn-success">Сформувати CSV</a>
         {% endif %}
         <!--<a href="#" class="btn btn-warning">Сформувати</a> -->
     </div>

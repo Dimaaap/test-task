@@ -127,13 +127,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 FIELDS_DICT = {
-    "Повне ім'я", faker.name(),
-    "Робота", faker.job(),
-    "Email", faker.email(),
-    "Ім'я домену", faker.domain_name(),
-    "Назва компанії", faker.company(),
-    "Номер телефону", faker.phone_number(),
-    "Текст", faker.text(),
-    "Адреса", faker.address(),
-    "Дата", faker.date()
+    "Повне ім'я": faker.name(),
+    "Робота": faker.job(),
+    "Email": faker.email(),
+    "Ім'я домену": faker.domain_name(),
+    "Назва компанії": faker.company(),
+    "Номер телефону": faker.phone_number(),
+    "Текст": faker.text(),
+    "Адреса": faker.address(),
+    "Дата": faker.date()
 }

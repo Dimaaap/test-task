@@ -10,24 +10,32 @@ class FakeCSVSchemaForm(forms.Form):
     POSSIBLE_DELIMITERS = (
         (',', 'Кома(,)'),
         (';', 'Крапка з комою(;)'),
-        ('\t', 'Табуляція(\\t)'),
         (" ", "Пробіл(' ')"),
         ("|", "Вертикальна палочка('|')")
     )
     title = forms.CharField(label="Введіть ім'я схеми", required=False,
                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-    #delimiter = forms.CharField(label="Оберіть роздіюлювач для полів у CSV файлі",
-    #                            widget=forms.Select(choices=POSSIBLE_DELIMITERS))
+    delimiter = forms.CharField(label="Оберіть роздіюлювач для полів у CSV файлі",
+                                widget=forms.Select(choices=POSSIBLE_DELIMITERS))
 
     def clean_title(self):
         title = self.cleaned_data['title']
         all_schemas = FakeCVSSchema.objects.filter(title=title)
         if all_schemas:
             raise forms.ValidationError('Схема з таким іменем вже існує')
-        if len(title) > 20:
-            raise forms.ValidationError('Назва схеми не повинна перевищувати 20 символів')
+        if len(title) > 50:
+            raise forms.ValidationError('Назва схеми не повинна перевищувати 50 символів')
         return title
 
+
+class CountFields(forms.Form):
+    count_field = forms.IntegerField(label="Введіть кількість полів,яку ви хочете сформувати")
+
+    def clean_count_field(self):
+        count_field = self.cleaned_data['count_field']
+        if count_field <= 0:
+            raise forms.ValidationError('Це значення не може бути порожнім,або рівним 0')
+        return count_field
 
 
 class CreateField(forms.ModelForm):
